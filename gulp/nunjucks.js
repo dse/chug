@@ -2,6 +2,7 @@ import gulp from 'gulp';
 import data from 'gulp-data';
 import nunjucks from 'gulp-nunjucks-render';
 import beautify from "gulp-beautify";
+import { globSync } from "glob";
 
 import createSiteData from './site-data.js';
 import { EXCLUDE_PARTIALS, EXCLUDE_TEMP_FILES } from './constants.js';
@@ -20,9 +21,16 @@ export const NUNJUCKS_PARTIALS = [
 
 let resetHtmlLastRunFlag = true;
 
-export function nunjucksTask() {
-    console.info(`starting nunjucksTask`);
-    return gulp.src(NUNJUCKS_FILES,
+export function nunjucksTask(cb) {
+    const files = [
+        ...NUNJUCKS_FILES,
+    ];
+    if (!globSync(files).length) {
+        console.warn(`nunjucksTask: no files found`);
+        return cb?.();
+    }
+    console.info(`nunjucksTask: starting`);
+    return gulp.src(files,
                     { base: 'src/pages',
                       since: gulp.lastRun(nunjucksTask) })
                .pipe(data(createSiteData))

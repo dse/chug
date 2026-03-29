@@ -5,19 +5,26 @@ import { config } from "./config.js";
 let server;
 
 export function startServerTask(cb) {
-    console.log(`starting startServerTask`);
+    console.info(`startServerTask: starting`);
+    function cb2() {
+        console.info(`startServerTask: completed`);
+        cb?.();
+    }
     if (server) {
+        console.info(`startServerTask: server already started`);
         cb?.();
         return;
     }
     server = browsersync.create();
-    server.init(config.browsersync, cb);
+    server.init(config.browsersync, cb2);
 }
 
+// never completes
 export function serverTask() {
-    console.log(`starting serverTask`);
+    console.info(`serverTask: starting`);
     // never returns
     if (server) {
+        console.info(`serverTask: server already started`);
         return;
     }
     server = browsersync.create();
@@ -25,9 +32,10 @@ export function serverTask() {
 }
 
 export function reloadTask(cb) {
-    console.log(`reloadTask: reloading server`);
+    console.info(`reloadTask: reloading server`);
     if (server) {
         server.reload();
     }
+    console.info(`reloadTask: completed`);
     cb?.();
 }
