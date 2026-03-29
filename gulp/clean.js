@@ -1,10 +1,14 @@
 import fs from 'node:fs';
-import { DIST } from './constants.js';
+import { getConfigDist } from "./config.js";
 
-export default function cleanTask(cb) {
-    if (fs.existsSync(DIST)) {
-        fs.rmSync(`${DIST}`, { recursive: true });
-    }
-    fs.mkdirSync(`${DIST}`, { recursive: true });
-    cb?.();
+export function createCleanTask(options) {
+    const dist = getConfigDist(options);
+    return function cleanTask(cb) {
+        if (fs.existsSync(dist)) {
+            fs.rmSync(dist, { recursive: true });
+        }
+        cb?.();
+    };
 }
+
+export default createCleanTask;

@@ -1,16 +1,26 @@
-const DEV_MODE = getDevMode();
-const EXCLUDE_PARTIALS = ['!**/_*', '!**/_*/**/*'];
-const EXCLUDE_TEMP_FILES = ['!**/*~', '!**/#*'];
-const DIST = DEV_MODE ? '_dev/dist/web' : 'dist/web';
+const EXCLUDE_PARTIALS = [
+    '!**/_*',
+    '!**/_*/**/*',
+];
 
-function getDevMode() {
-    const env = process.env.NODE_ENV;
-    return env === "dev" || (env != null && env !== 'production');
-}
+const EXCLUDE_TEMP_FILES = [
+    "!**/*~",
+    "!**/#*#",
+    "!**/*.tmp",
+    "!**/*.tmp.*",
+    "!**/*.tmp-*",
+    "!**/*.bak",
+    "!**/*.bak.*",
+    "!**/*.bak-*",
+    "!**/*.ORIG",
+    "!**/*.ORIG.*",
+    "!**/*.ORIG-*",
+    "!**/*.orig",
+    "!**/*.orig.*",
+    "!**/*.orig-*",
+];
 
 export {
     EXCLUDE_PARTIALS,
     EXCLUDE_TEMP_FILES,
-    DEV_MODE,
-    DIST,
 };

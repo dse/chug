@@ -1,14 +1,29 @@
 import gulp from 'gulp';
-import cleanTask from './clean.js';
-import sassTask from './sass.js';
-import htmlTask from './html.js';
-import rollupTask from './rollup.js';
-import staticTask from './static.js';
-import nunjucksTask from './nunjucks.js';
+import { createCleanTask } from './clean.js';
+import { createSassTask } from './sass.js';
+import { createRollupTask } from './rollup.js';
+import { createStaticTask } from './static.js';
+import { createNunjucksTask } from './nunjucks.js';
+import { createInitTask } from './init.js';
+import { createSitemapTask } from './sitemap.js';
 
-const buildTask = gulp.series(
-    cleanTask,
-    gulp.parallel(sassTask, htmlTask, rollupTask, staticTask, nunjucksTask)
-);
+function createBuildTask(options) {
+    options = { mode: "build", ...options };
+    return gulp.series(
+        createCleanTask(options),
+        createInitTask(options),
+        gulp.parallel(
+            createSassTask(options),
+            createRollupTask(options),
+            gulp.series(
+                gulp.parallel(
+                    createStaticTask(options),
+                    createNunjucksTask(options),
+                ),
+                createSitemapTask(options),
+            ),
+        )
+    );
+}
 
-export default buildTask;
+export default createBuildTask;

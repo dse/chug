@@ -1,18 +1,23 @@
 import babel from '@rollup/plugin-babel';
 import * as rollup from 'rollup';
 import resolve from '@rollup/plugin-node-resolve';
-import { DIST } from './constants.js';
+import { getConfigDist } from "./config.js";
 
-export default function rollupTask() {
-    return rollup
-        .rollup({ input: 'src/scripts/split-flap/clock-page.js',
-                  plugins: [resolve(), babel({ babelHelpers: 'bundled' })] })
-        .then(bundle => {
-            const filename = `./${DIST}/split-flap/scripts/main.js`;
-            return bundle.write({
-                file: filename,
-                format: 'umd',
-                name: 'library',
+export function createRollupTask(options) {
+    const dist = getConfigDist(options);
+    return function rollupTask() {
+        return rollup
+            .rollup({ input: 'src/scripts/main.js',
+                      plugins: [resolve(), babel({ babelHelpers: 'bundled' })] })
+            .then(bundle => {
+                const filename = `${dist}/js/main.js`;
+                return bundle.write({
+                    file: filename,
+                    format: 'umd',
+                    name: 'library',
+                });
             });
-        });
+    };
 }
+
+export default createRollupTask;
