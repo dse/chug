@@ -1,40 +1,33 @@
 import browsersync from 'browser-sync';
-import { getBrowserSyncConfig } from "./config.js";
 
-export function createServerTasks(options) {
-    let server;
+import { config } from "./config.js";
 
-    return {
-        startServerTask,
-        serverTask,
-        reloadTask,
-    };
+let server;
 
-    function startServerTask(cb) {
-        if (server) {
-            cb?.();
-            return;
-        }
-        server = browsersync.create();
-        const config = getBrowserSyncConfig();
-        server.init(config, cb);
-    }
-    function serverTask() {
-        // never returns
-        if (server) {
-            return;
-        }
-        server = browsersync.create();
-        const config = getBrowserSyncConfig();
-        server.init(config);
-    }
-    function reloadTask(cb) {
-        console.log(`reloadTask: reloading server`);
-        if (server) {
-            server.reload();
-        }
+export function startServerTask(cb) {
+    console.log(`starting startServerTask`);
+    if (server) {
         cb?.();
+        return;
     }
+    server = browsersync.create();
+    server.init(config.browsersync, cb);
 }
 
-export default createServerTasks;
+export function serverTask() {
+    console.log(`starting serverTask`);
+    // never returns
+    if (server) {
+        return;
+    }
+    server = browsersync.create();
+    server.init(config.browsersync);
+}
+
+export function reloadTask(cb) {
+    console.log(`reloadTask: reloading server`);
+    if (server) {
+        server.reload();
+    }
+    cb?.();
+}

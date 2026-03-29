@@ -1,25 +1,33 @@
 import gulp from 'gulp';
-import { createCleanTask } from './clean.js';
-import { createSassTask } from './sass.js';
-import { createRollupTask } from './rollup.js';
-import { createNunjucksTask } from './nunjucks.js';
-import { createStartServerTask } from './server.js';
-import { createWatchTask } from './watch.js';
-import { createInitTask } from './init.js';
 
-export function createDevTask(options) {
-    options = { mode: "dev", ...options };
-    return gulp.series(
-        createCleanTask(options),
-        createInitTask(options),
-        gulp.parallel(
-            createSassTask(options),
-            createRollupTask(options),
-            createNunjucksTask(options),
-        ),
-        createStartServerTask(options),
-        createWatchTask(options),
-    );
-}
+import { cleanTask } from './clean.js';
+import { initTask } from './init.js';
+import { sassTask } from './sass.js';
+import { rollupTask } from './rollup.js';
+import { nunjucksTask } from './nunjucks.js';
+import { startServerTask } from './server.js';
+import { watchTask } from './watch.js';
 
-export default createDevTask;
+export const devTask = gulp.series(
+    cleanTask,
+    initTask,
+    gulp.parallel(
+        sassTask,
+        rollupTask,
+        nunjucksTask,
+    ),
+    startServerTask,
+    watchTask,
+);
+
+export const devSeriesTask = gulp.series(
+    cleanTask,
+    initTask,
+    sassTask,
+    rollupTask,
+    nunjucksTask,
+    startServerTask,
+    watchTask,
+);
+
+export default devTask;
