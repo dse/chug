@@ -32,6 +32,11 @@ function manageEnvironment(env) {
 }
 
 export function nunjucksTask(cb) {
+    let since = gulp.lastRun(nunjucksTask);
+    if (resetHtmlLastRunFlag) {
+        since = undefined;
+        resetHtmlLastRunFlag = false;
+    }
     const files = [
         ...NUNJUCKS_FILES,
     ];
@@ -40,9 +45,7 @@ export function nunjucksTask(cb) {
         return cb?.();
     }
     console.info(`nunjucksTask: starting`);
-    return gulp.src(files,
-                    { base: 'src/pages',
-                      since: gulp.lastRun(nunjucksTask) })
+    return gulp.src(files, { base: 'src/pages', since: since })
                .pipe(data(createSiteData))
                .pipe(nunjucks({
                    ...config.nunjucks,
@@ -53,6 +56,7 @@ export function nunjucksTask(cb) {
 }
 
 export function resetLastRunTask(cb) {
+    console.info(`resetLastRunTask: resetting last run`);
     // Invoked when a partial changes before nunjucksTask is
     // invoked, so that everything is recompiled.
     resetHtmlLastRunFlag = true;
