@@ -16,7 +16,7 @@ export function startServerTask(cb) {
         return;
     }
     server = browsersync.create();
-    server.init(config.browsersync, cb2);
+    server.init(config.browserSync, cb2);
 }
 
 // never completes
