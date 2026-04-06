@@ -17,6 +17,9 @@ export const config = {
     },
     sitemap: {
     },
+    browserSync: {
+        server: ["dist/web", "public"],
+    },
 };
 
 export default config;
