@@ -19,7 +19,8 @@ export function createSiteData(options) {
         Object.assign(o, obj);
     }
     Object.assign(o, {
-        "cacheBuster": String(new Date().getTime()) + "." + String(Math.floor(1 + Math.random())).slice(2)
+        "cacheBuster": (String(new Date().getTime()) + "." +
+                        String(Math.floor(1 + Math.random())).slice(2))
     });
     return o;
 }
