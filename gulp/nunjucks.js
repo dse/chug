@@ -21,6 +21,16 @@ export const NUNJUCKS_PARTIALS = [
 
 let resetHtmlLastRunFlag = true;
 
+const manageEnvCallbacks = [];
+
+export function addManageEnvCallback(cb) {
+    manageEnvCallbacks.push(cb);
+}
+
+function manageEnvironment(env) {
+    manageEnvCallbacks.forEach(cb => cb(env));
+}
+
 export function nunjucksTask(cb) {
     const files = [
         ...NUNJUCKS_FILES,
@@ -34,7 +44,10 @@ export function nunjucksTask(cb) {
                     { base: 'src/pages',
                       since: gulp.lastRun(nunjucksTask) })
                .pipe(data(createSiteData))
-               .pipe(nunjucks(config.nunjucks))
+               .pipe(nunjucks({
+                   ...config.nunjucks,
+                   manageEnv: manageEnvironment,
+               }))
                .pipe(beautify.html(config.beautify.html))
                .pipe(gulp.dest("dist/web"));
 }
