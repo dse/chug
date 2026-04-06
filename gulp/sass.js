@@ -12,7 +12,7 @@ const sass = gulpSass(dartSass);
 
 export function sassTask(cb) {
     const files = [
-        'src/styles/xx/**/*.scss',
+        'src/styles/**/*.scss',
         ...EXCLUDE_PARTIALS,
         ...EXCLUDE_TEMP_FILES,
     ];
@@ -32,5 +32,5 @@ export function sassTask(cb) {
                }))
                .pipe(sass(config.sass))
                .pipe(beautify.css(config.beautify.sass))    // .pipe(postcss([autoprefixer]))
-               .pipe(gulp.dest(`dist/web/split-flap/styles`));
+               .pipe(gulp.dest(`dist/web/css`));
 }

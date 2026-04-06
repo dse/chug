@@ -1,6 +1,6 @@
 export const config = {
     nunjucks: {
-        "path": "src/pages",
+        "path": ["src/pages"],
     },
     beautify: {
         html: {
